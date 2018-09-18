@@ -1,1 +1,10 @@
 language: node_js
+deploy:
+  provider: npm
+  email: weiss.dennis98@yahoo.de
+  on:
+    tags: true
+    branch: master
+    skip_cleanup: true
+dd:
+  secure: ntX10t+I6ur8nsLOGAtgCsyrvo2xTMSl09RsLhFnEcKVJN11RTWk/A0qcxOb7shVSPyNz8WP2rHOHixcFl/FtivEhEvjX6q792o0aHUfQPhlNVkfXGF36F3jg9rIaXns+vlh8x7XvvZtq/pogP5EbtanJmi482uPwSymYZGER2J6ILpxDhZIxPnvc/vlp+gqni1PJOvrHYoVnuBy4/iRXVTMC4Mk4KHb2Ic77otncrRZorKTAzSjP2kd/821EMJgaprcsKW2ZeSpN4oUwxAwUuh/Yjby2ZOA409iCYInqds4nn5MM1bBAKx465kp2O8nJoiT0FS0sC8NiuU+GItQY2KGIz0lKlFX+8yqIAqqEjr04QgaNXtLeUUzKIIVtRpCgeZlNpmOiq7peQQWH/CAc7DgNHjz5SM2WxgRWiqhLxLnCeBx1IeszDr/n/8esNYreq+pgJevXqUpeptRsU75w4RmD18Z/OoSLy0q/zo9yj/KXXfoVS0mmzMJL0HXA2j7gX8vxn4T35pYsuQiqEPmbIfVAEtQfLxK3/t0OcK8lOUDI2vsyJ9p2rxYfsKOC4U4dfoMV32PqURudH2LMDMnGqcxjZfmDIozBWS0FI9H1U+d5RCO5N0CygnP8dQrF6+jv6W93ugUUicXl9k9Ig2pkMBXjwIyRESeL9LYh8tOzz4=

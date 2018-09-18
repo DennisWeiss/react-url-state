@@ -1,0 +1,38 @@
+{
+  "name": "react-url-state",
+  "version": "0.1.1",
+  "description": "React URL State library to set state in the query string of the URL and parse if set.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DennisWeiss/react-url-state.git"
+  },
+  "keywords": [
+    "react-url-state",
+	"react",
+	"url",
+	"state",
+	"querystring",
+	"query",
+	"string",
+	"parse",
+	"setstate",
+	"searchparams",
+	"browser",
+	"history"
+  ],
+  "author": "Dennis Weiss",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DennisWeiss/react-url-state/issues"
+  },
+  "homepage": "https://github.com/DennisWeiss/react-url-state#readme",
+  "dependencies": {
+	"react": "^16.3.2",
+	"history": "^4.7.2",
+	"query-string": "^6.1.0"
+  }
+}
