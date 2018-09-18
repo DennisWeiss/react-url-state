@@ -1,6 +1,8 @@
 language: node_js
 node_js:
     - "node"
+script:
+    - echo "skipping tests"
 deploy:
   provider: npm
   email: weiss.dennis98@yahoo.de
