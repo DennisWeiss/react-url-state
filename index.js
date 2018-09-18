@@ -94,5 +94,4 @@ var initializeReactUrlState = function (component, fromIdResolvers, toIdMappers,
     };
 };
 
-
 module.exports.initializeReactUrlState = initializeReactUrlState;
