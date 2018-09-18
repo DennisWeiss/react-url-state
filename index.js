@@ -2,9 +2,6 @@ var React = require("react");
 var queryString = require("query-string");
 var createHistory = require("history/createBrowserHistory");
 
-console.log("React", React);
-console.log("queryString", queryString);
-console.log("createHistory", createHistory);
 
 var history = createHistory.default();
 
