@@ -1,7 +1,9 @@
-var createHistory = require('history/createBrowserHistory').default();
-var Promise = require('promise-polyfill').default();
+'use strict';
 
+var createHistory = require('history/createBrowserHistory').default;
 var queryString = require('./query-string');
+
+console.log('history', createHistory);
 
 
 var history = createHistory();
@@ -69,14 +71,23 @@ var convertToHistory = function (state, pathname, toIdMappers) {
     };
 };
 
-var initializeReactUrlState = function (options) {
-    if (this == null) {
-        throw 'the React component instance has to be bound to the initializeReactURlState function. ' +
-        'You achieve this by using .bind(this) or arrow functions introduced in ES6';
+var initializedReactUrlState = function (options) {
+    var context = this;
+    if (options == null) {
+        throw 'No options defined in initializeReactUrlState! ' +
+        'You have to call the function by using currying like so: initializeReactUrlState(this)(options)';
+    }
+
+    if (options.fromIdResolvers == null) {
+        options.fromIdResolvers = {};
+    }
+
+    if (options.toIdMappers == null) {
+        options.toIdMappers = {};
     }
 
     var setUrlState = function (urlState, callback) {
-        this.setState(urlState, function () {
+        context.setState(urlState, function () {
             history.push(convertToHistory(urlState, options.pathname, options.toIdMappers));
             if (typeof callback === 'function') {
                 callback();
@@ -86,14 +97,18 @@ var initializeReactUrlState = function (options) {
 
     var urlState = Object.assign({}, queryString.parse(history.location.search));
     var state = {};
-    Object.keys(this.state).forEach(function (key) {
-        state[key] = this.state[key];
+    Object.keys(context.state).forEach(function (key) {
+        state[key] = context.state[key];
     });
     getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
 
     return {
         setUrlState: setUrlState
     };
+};
+
+var initializeReactUrlState = function (context) {
+    return initializedReactUrlState.bind(context);
 };
 
 
