@@ -94,7 +94,7 @@ componentDidMount() {
 
 #### *context*
 
-Here you need to pass the reference of your react component. Calling the `initializeReactUrlState` inside 
+Here you need to pass the reference of your react component. Calling the `initializeReactUrlState` function inside 
 `componentDidMount()` you do this by passing in `this`.
 
 #### *options*
@@ -141,7 +141,7 @@ const options = {
 
 Depending on your use case you might just want to store an id itself in the component's state.
 
-Note that the values in `this.state` get overwritten once the query string parameters have been resolved but the values 
+Note that the values in `this.state` get overwritten once the query string parameters have been resolved, but the values 
 set initially in `this.state` act as default values. Furthermore all keys that don't have a defined resolver but are given 
 in the URL will just be ignored.
 
