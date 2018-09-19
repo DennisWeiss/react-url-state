@@ -12,20 +12,20 @@
   },
   "keywords": [
     "react-url-state",
-		"react",
-		"url",
-		"state",
-		"querystring",
-		"query",
-		"string",
-		"parse",
-		"setstate",
-		"searchparams",
-		"browser",
-		"history",
-		"query parameter",
-		"parameter",
-		"url search"
+    "react",
+    "url",
+    "state",
+    "querystring",
+    "query",
+    "string",
+    "parse",
+    "setstate",
+    "searchparams",
+    "browser",
+    "history",
+    "query parameter",
+    "parameter",
+    "url search"
   ],
   "author": "Dennis Weiss",
   "license": "MIT",
@@ -34,8 +34,7 @@
   },
   "homepage": "https://github.com/DennisWeiss/react-url-state#readme",
   "dependencies": {
-	"react": "^16.3.2",
-	"history": "^4.7.2",
-	"query-string": "^6.1.0"
+    "history": "^4.7.2",
+    "promise-polyfill": "^8.1.0"
   }
 }

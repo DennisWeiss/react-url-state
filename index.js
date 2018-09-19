@@ -1,20 +1,22 @@
-var React = require("react");
-var queryString = require("query-string");
-var createHistory = require("history/createBrowserHistory");
+var createHistory = require('history/createBrowserHistory').default();
+var Promise = require('promise-polyfill').default();
 
-var history = createHistory.default();
+var queryString = require('./query-string');
+
+
+var history = createHistory();
 
 var isPrimitiveType = function (a) {
-    return typeof a === 'string' || typeof a === 'number' || typeof b === 'boolean'
+    return typeof a === 'string' || typeof a === 'number' || typeof a === 'boolean';
 };
 
-var getIdResolverPromise = function (urlState, resolvers, allowedQueryStringParams, state, resolve) {
+var getIdResolverPromise = function (urlState, resolvers, state, resolve) {
     if (state == null) {
         state = {};
     }
     if (resolve == null) {
         return new Promise(function (resolve) {
-            return getIdResolverPromise(urlState, resolvers, allowedQueryStringParams, state, resolve);
+            return getIdResolverPromise(urlState, resolvers, state, resolve);
         });
     }
     var currentState = Object.assign({}, state);
@@ -23,19 +25,15 @@ var getIdResolverPromise = function (urlState, resolvers, allowedQueryStringPara
         resolve(currentState);
     } else {
         var key = Object.keys(currentUrlState)[0];
-        if (allowedQueryStringParams != null && !allowedQueryStringParams.includes(key)) {
+        if (resolvers[key] == null) {
             delete currentUrlState[key];
-            getIdResolverPromise(currentUrlState, resolvers, allowedQueryStringParams, currentState, resolve);
-        } else if (resolvers[key] == null) {
-            currentState[key] = currentUrlState[key];
-            delete currentUrlState[key];
-            getIdResolverPromise(currentUrlState, resolvers, allowedQueryStringParams, currentState, resolve);
-        } else if (typeof resolvers[key] === "function") {
+            getIdResolverPromise(currentUrlState, resolvers, currentState, resolve);
+        } else if (typeof resolvers[key] === 'function') {
             resolvers[key](currentUrlState[key])
                 .then(function (value) {
                     currentState[key] = value;
                     delete currentUrlState[key];
-                    getIdResolverPromise(currentUrlState, resolvers, allowedQueryStringParams, currentState, resolve)
+                    getIdResolverPromise(currentUrlState, resolvers, currentState, resolve);
                 });
         }
     }
@@ -43,24 +41,25 @@ var getIdResolverPromise = function (urlState, resolvers, allowedQueryStringPara
 
 var getSearchString = function (state, toIdMappers) {
     if (Object.keys(state).length === 0) {
-        return "";
+        return '';
     }
-    return "?" + Object.keys(state)
+    return '?' + Object.keys(state)
         .map(function (key) {
             if (isPrimitiveType(state[key])) {
-                return key + "=" + encodeURIComponent(state[key] != null ? state[key] : "");
+                return key + '=' + encodeURIComponent(state[key] != null ? state[key] : '');
             } else {
                 if (toIdMappers[key] == null) {
-                    throw "No id mapper provided for " + key + "! You always need to provide a mapper if the value is not a primitive data type";
-                } else if (typeof toIdMappers[key] !== "function") {
-                    throw "Id mapper of " + key + " has to be a function!";
+                    throw 'No id mapper provided for ' + key +
+                    '! You always need to provide a mapper if the value is not a primitive data type';
+                } else if (typeof toIdMappers[key] !== 'function') {
+                    throw 'Id mapper of ' + key + ' has to be a function!';
                 } else {
                     var value = toIdMappers[key](state[key]);
-                    return key + "=" + encodeURIComponent(value != null ? value : "");
+                    return key + '=' + encodeURIComponent(value != null ? value : '');
                 }
             }
         })
-        .join("&");
+        .join('&');
 };
 
 var convertToHistory = function (state, pathname, toIdMappers) {
@@ -68,17 +67,18 @@ var convertToHistory = function (state, pathname, toIdMappers) {
         pathname: pathname,
         search: getSearchString(state, toIdMappers)
     };
-}
+};
 
-var initializeReactUrlState = function (component, fromIdResolvers, toIdMappers, pathname, allowedQueryStringParams) {
-    if (!component.prototype instanceof React.Component) {
-        throw "component has to be a subclass of React.Component!";
+var initializeReactUrlState = function (options) {
+    if (this == null) {
+        throw 'the React component instance has to be bound to the initializeReactURlState function. ' +
+        'You achieve this by using .bind(this) or arrow functions introduced in ES6';
     }
 
     var setUrlState = function (urlState, callback) {
-        component.setState(urlState, function () {
-            history.push(convertToHistory(urlState, pathname, toIdMappers))
-            if (typeof callback === "function") {
+        this.setState(urlState, function () {
+            history.push(convertToHistory(urlState, options.pathname, options.toIdMappers));
+            if (typeof callback === 'function') {
                 callback();
             }
         });
@@ -86,10 +86,10 @@ var initializeReactUrlState = function (component, fromIdResolvers, toIdMappers,
 
     var urlState = Object.assign({}, queryString.parse(history.location.search));
     var state = {};
-    Object.keys(component.state).forEach(function (key) {
-        state[key] = component.state[key];
+    Object.keys(this.state).forEach(function (key) {
+        state[key] = this.state[key];
     });
-    getIdResolverPromise(urlState, fromIdResolvers, allowedQueryStringParams).then(setUrlState);
+    getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
 
     return {
         setUrlState: setUrlState
