@@ -34,7 +34,6 @@
   },
   "homepage": "https://github.com/DennisWeiss/react-url-state#readme",
   "dependencies": {
-    "history": "^4.7.2",
-    "promise-polyfill": "^8.1.0"
+    "history": "^4.7.2"
   }
 }
