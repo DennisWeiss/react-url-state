@@ -1,7 +1,7 @@
 {
   "name": "react-url-state",
-  "version": "0.2.3",
-  "description": "React URL State library to set state in the query string of the URL and parse if set.",
+  "version": "0.2.4",
+  "description": "react-url-state is a library to set the state of a react component in the query string of the URL and parse it if set.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
