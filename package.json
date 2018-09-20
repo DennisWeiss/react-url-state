@@ -1,6 +1,6 @@
 {
   "name": "react-url-state",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React URL State library to set state in the query string of the URL and parse if set.",
   "main": "index.js",
   "scripts": {
