@@ -20,8 +20,9 @@ import {initializeReactUrlState} from 'react-url-state'
 
 // This object contains all the configuration needed.
 const reactUrlStateOptions = {
-  /* Here you define your resolvers to map from a string in the URL to an object or any data type you like.
-  They need to return promises to allow you to make asynchronous API calls. */
+  /* Here you define your resolvers to map from a string in 
+  the URL to an object or any data type you like. They need to 
+  return promises to allow you to make asynchronous API calls. */
   fromIdResolvers: {
     user: id => new Promise((resolve, reject) => {
       axios
@@ -36,7 +37,8 @@ const reactUrlStateOptions = {
         .catch(reject)
     })
   },
-  /* Here you define mapper functions to map from the value maintained in state to a string shown in the URL. */
+  /* Here you define mapper functions to map from the value 
+  maintained in state to a string shown in the URL. */
   toIdMappers: {
     user: user => user.id
   },
@@ -55,13 +57,16 @@ export default class YourComponent extends React.Component {
   // some code between
 	
   componentDidMount() {
-    /* call the initializeReactUrlState function in componentDidMount() 
-    and assign its return value to a variable of the component */
+    /* call the initializeReactUrlState function in 
+    componentDidMount() and assign its return value to a 
+    variable of the component */
     this.reactUrlState = initializeReactUrlState(this)(reactUrlStateOptions)
   }
 	
   onChangeUser(value) {
-    // call this.reactUrlState.setUrlState instead of this.setState for added functionality to set query string accordingly
+    /* call this.reactUrlState.setUrlState instead of 
+    this.setState for added functionality to set query string 
+    accordingly */
     this.reactUrlState.setUrlState({user: value})
   }
 	
