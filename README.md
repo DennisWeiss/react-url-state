@@ -16,6 +16,7 @@ $ npm i react-url-state
 
 ```js
 import React from 'react'
+import axios from 'axios'
 import {initializeReactUrlState} from 'react-url-state'
 
 // This object contains all the configuration needed.

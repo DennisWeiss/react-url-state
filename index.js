@@ -110,6 +110,6 @@ var initializedReactUrlState = function (options) {
 var initializeReactUrlState = function (context) {
     return initializedReactUrlState.bind(context);
 };
- 
+
 
 module.exports.initializeReactUrlState = initializeReactUrlState;
