@@ -122,7 +122,7 @@ With the key `data` you would have something like:
 this.state = {
   data: {
     id: '123',
-    // much more fields containing data
+    // many more fields containing data
   }
 }
 ```
