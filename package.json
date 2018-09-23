@@ -35,7 +35,6 @@
   "homepage": "https://github.com/DennisWeiss/react-url-state#readme",
   "dependencies": {
     "decode-uri-component": "^0.2.0",
-    "strict-uri-encode": "^2.0.0",
     "history": "^4.7.2"
   }
 }

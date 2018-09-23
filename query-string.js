@@ -41,7 +41,7 @@ var _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol
     return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj;
 };
 
-var strictUriEncode = require('strict-uri-encode');
+var strictUriEncode = require('./strict-uri-encode');
 var decodeComponent = require('decode-uri-component');
 
 function encoderForArrayFormat(options) {
