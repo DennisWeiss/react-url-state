@@ -16,7 +16,7 @@ var getIdResolverPromise = function (urlState, resolvers, state, resolve, index=
   }
   if (resolve == null) {
     return new Promise(function (resolve) {
-      return getIdResolverPromise(urlState, resolvers, state, resolve);
+      return getIdResolverPromise(urlState, resolvers, state, resolve, index);
     });
   }
   var currentState = Object.assign({}, state);
