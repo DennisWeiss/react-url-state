@@ -90,7 +90,7 @@ var initializedReactUrlState = function (options) {
         context.setState(urlState, function () {
             history.push(convertToHistory(urlState, options.pathname, options.toIdMappers));
             if (typeof callback === 'function') {
-                callback();
+                callback.apply(context);
             }
         });
     };
