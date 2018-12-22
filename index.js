@@ -10,7 +10,7 @@ var isPrimitiveType = function (a) {
   return typeof a === 'string' || typeof a === 'number' || typeof a === 'boolean';
 };
 
-var getIdResolverPromise = function (urlState, resolvers, state, resolve) {
+var getIdResolverPromise = function (urlState, resolvers, state, resolve, index=0) {
   if (state == null) {
     state = {};
   }
@@ -21,19 +21,17 @@ var getIdResolverPromise = function (urlState, resolvers, state, resolve) {
   }
   var currentState = Object.assign({}, state);
   var currentUrlState = Object.assign({}, urlState);
-  if (Object.keys(currentUrlState).length === 0) {
+  if (Object.keys(currentUrlState).length <= index) {
     resolve(currentState);
   } else {
-    var key = Object.keys(currentUrlState)[0];
+    var key = Object.keys(currentUrlState)[index];
     if (resolvers[key] == null) {
-      delete currentUrlState[key];
-      getIdResolverPromise(currentUrlState, resolvers, currentState, resolve);
+      getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
     } else if (typeof resolvers[key] === 'function') {
       resolvers[key](currentUrlState[key])
         .then(function (value) {
           currentState[key] = value;
-          delete currentUrlState[key];
-          getIdResolverPromise(currentUrlState, resolvers, currentState, resolve);
+          getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
         });
     }
   }
@@ -45,18 +43,18 @@ var getSearchString = function (state, toIdMappers) {
   }
   return '?' + Object.keys(state)
     .map(function (key) {
-      if (isPrimitiveType(state[key])) {
-        return key + '=' + encodeURIComponent(state[key] != null ? state[key] : '');
-      } else {
-        if (toIdMappers[key] == null) {
+      if (toIdMappers[key] == null) {
+        if (isPrimitiveType(state[key])) {
+          return key + '=' + encodeURIComponent(state[key] != null ? state[key] : '');
+        } else {
           throw 'No id mapper provided for ' + key +
           '! You always need to provide a mapper if the value is not a primitive data type';
-        } else if (typeof toIdMappers[key] !== 'function') {
-          throw 'Id mapper of ' + key + ' has to be a function!';
-        } else {
-          var value = toIdMappers[key](state[key]);
-          return key + '=' + encodeURIComponent(value != null ? value : '');
         }
+      } else if (typeof toIdMappers[key] !== 'function') {
+        throw 'Id mapper of ' + key + ' has to be a function!';
+      } else {
+        var value = toIdMappers[key](state[key]);
+        return key + '=' + encodeURIComponent(value != null ? value : '');
       }
     })
     .join('&');
@@ -93,8 +91,8 @@ var initializedReactUrlState = function (options) {
   }
 
   var setUrlState = function (urlState, callback) {
+    console.log('settting state', urlState)
     context.setState(urlState, function () {
-      console.log('context.state', context.state)
       var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState)
       history.push(convertToHistory(urlStateWithPreviousState, options.pathname, options.toIdMappers));
       if (typeof callback === 'function') {
@@ -108,6 +106,8 @@ var initializedReactUrlState = function (options) {
   Object.keys(context.state).forEach(function (key) {
     state[key] = context.state[key];
   });
+
+  console.log('id resolver promises')
   getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
 
   return {
