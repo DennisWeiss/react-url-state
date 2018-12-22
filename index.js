@@ -3,7 +3,6 @@
 var createHistory = require('history/createBrowserHistory').default;
 var queryString = require('./query-string');
 
-
 var history = createHistory();
 
 var isPrimitiveType = function (a) {
