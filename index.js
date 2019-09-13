@@ -1,9 +1,10 @@
 'use strict';
 
-var createHistory = require('history/createBrowserHistory').default;
+var createBrowserHistory = require('history/createBrowserHistory').default;
+var createMemoryHistory = require('history/createMemoryHistory').default;
 var queryString = require('./query-string');
 
-var history = createHistory();
+const history = typeof window !== 'undefined' ? createBrowserHistory() : createMemoryHistory();
 
 var isPrimitiveType = function (a) {
   return typeof a === 'string' || typeof a === 'number' || typeof a === 'boolean';
