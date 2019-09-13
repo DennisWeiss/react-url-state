@@ -24,7 +24,13 @@ var getIdResolverPromise = function (urlState, resolvers, state, resolve, index=
     resolve(currentState);
   } else {
     var key = Object.keys(currentUrlState)[index];
-    if (resolvers[key] == null) {
+    if(typeof resolvers === "function") {
+      resolvers(key, currentUrlState[key], currentState)
+        .then(function (newState) {
+          currentState = newState;
+          getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
+        });
+    } else if (resolvers[key] == null) {
       getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
     } else if (typeof resolvers[key] === 'function') {
       resolvers[key](currentUrlState[key])
@@ -42,7 +48,9 @@ var getSearchString = function (state, toIdMappers) {
   }
   return '?' + Object.keys(state)
     .map(function (key) {
-      if (toIdMappers[key] == null) {
+      if(typeof toIdMappers === "function") {
+        return toIdMappers(key, state);
+      } else if (toIdMappers[key] == null) {
         if (isPrimitiveType(state[key])) {
           return key + '=' + encodeURIComponent(state[key] != null ? state[key] : '');
         } else {
@@ -56,7 +64,8 @@ var getSearchString = function (state, toIdMappers) {
         return key + '=' + encodeURIComponent(value != null ? value : '');
       }
     })
-    .join('&');
+    .filter(p => p !== undefined && p !== null)
+    .join('&')
 };
 
 var convertToHistory = function (state, pathname, toIdMappers) {
