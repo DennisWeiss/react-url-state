@@ -84,7 +84,7 @@ var getCombinedUrlState = function (previousState, newUrlState) {
   return combinedUrlState
 }
 
-var initializedReactUrlState = function (options) {
+var initializedReactUrlState = function (options, callback) {
   var context = this;
   if (options == null) {
     throw 'No options defined in initializeReactUrlState! ' +
@@ -100,7 +100,7 @@ var initializedReactUrlState = function (options) {
   }
 
   var setUrlState = function (urlState, callback) {
-    if(options.debug) { console.log('react-url-state: setting state: ', urlState); }
+    if(options.debug) { console.log('react-url-state: setting state: ', urlState, ' callback: ', callback); }
     context.setState(urlState, function () {
       var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState);
       let pathname = options.pathname || window.location.pathname;
@@ -118,7 +118,7 @@ var initializedReactUrlState = function (options) {
   });
 
   if(options.debug) { console.log('react-url-state: getting id resolver promises..'); }
-  getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
+  getIdResolverPromise(urlState, options.fromIdResolvers).then(newState => setUrlState(newState, callback));
 
   return {
     setUrlState: setUrlState
