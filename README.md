@@ -183,6 +183,16 @@ const options = {
 }
 ```
 
+#### *debug*
+
+A flag that enables debug information being dumped to the console, disabled by default.
+
+```js
+const options = {
+  debug: true
+}
+```
+
 ### .setReactUrlState(*urlState*, *[callback]*)
 
 This function is called on the reference that has been returned by `initializeReactUrlState`.
