@@ -106,7 +106,7 @@ var initializedReactUrlState = function (options) {
     state[key] = context.state[key];
   });
 
-  if(options.debug) { console.log('react-url-state: getting id resolver promises..', urlState); }
+  if(options.debug) { console.log('react-url-state: getting id resolver promises..'); }
   getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
 
   return {
