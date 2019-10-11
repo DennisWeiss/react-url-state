@@ -90,7 +90,7 @@ var initializedReactUrlState = function (options) {
   }
 
   var setUrlState = function (urlState, callback) {
-    if(options.debug) { console.log('react-url-state: setting state..', urlState); }
+    if(options.debug) { console.log('react-url-state: setting state..'); }
     context.setState(urlState, function () {
       var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState)
       history.push(convertToHistory(urlStateWithPreviousState, options.pathname, options.toIdMappers));
