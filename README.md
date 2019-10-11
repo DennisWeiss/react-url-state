@@ -151,6 +151,8 @@ Note that the values in `this.state` get overwritten once the query string param
 set initially in `this.state` act as default values. Furthermore all keys that don't have a defined resolver but are given 
 in the URL will just be ignored.
 
+Also note that if the key is present in the URL but has no value (with or without a `=` sign at the end) then you must handle data validation in each of your `fromIdResolvers`.
+
 #### *toIdMappers*
 
 These function map from your complex data object to a simple string that is then set as query argument.
