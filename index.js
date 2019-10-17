@@ -3,7 +3,6 @@
 var createHistory = require('history/createBrowserHistory').default;
 var queryString = require('./query-string');
 
-
 var history = createHistory();
 
 var isPrimitiveType = function (a) {
@@ -91,7 +90,7 @@ var initializedReactUrlState = function (options) {
   }
 
   var setUrlState = function (urlState, callback) {
-    console.log('settting state', urlState)
+    if(options.debug) { console.log('react-url-state: setting state: ', urlState); }
     context.setState(urlState, function () {
       var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState)
       history.push(convertToHistory(urlStateWithPreviousState, options.pathname, options.toIdMappers));
@@ -107,7 +106,7 @@ var initializedReactUrlState = function (options) {
     state[key] = context.state[key];
   });
 
-  console.log('id resolver promises')
+  if(options.debug) { console.log('react-url-state: getting id resolver promises..'); }
   getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
 
   return {
