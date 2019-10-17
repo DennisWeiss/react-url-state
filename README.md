@@ -190,4 +190,4 @@ This function is called on the reference that has been returned by `initializeRe
 It works analogous to the `setState` function from React. Pass in an object containing all the keys that are supposed to 
 be represented in the query string. The `toIdMappers` you have defined previously do the rest now.
 For all others keys call the `setState` function from React like you would usually do.
-Note that it's first argument should be an independent object and it does not receive the most-up-to-date state like React's `setState` though (replace `this.setState(state => {key:state.key+1})` logic with `this.setUrlState({key:this.state.key+1})` and pray you don't run into an outdated state).
+Note that its first argument should be an independent object and it does not receive the most-up-to-date state like React's `setState` though (replace `this.setState(state => {key:state.key+1})` logic with `this.setUrlState({key:this.state.key+1})` and pray you don't run into an outdated state).
