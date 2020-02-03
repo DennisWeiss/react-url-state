@@ -92,8 +92,9 @@ var initializedReactUrlState = function (options) {
   var setUrlState = function (urlState, callback) {
     if(options.debug) { console.log('react-url-state: setting state: ', urlState); }
     context.setState(urlState, function () {
-      var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState)
-      history.push(convertToHistory(urlStateWithPreviousState, options.pathname, options.toIdMappers));
+      var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState);
+      let pathname = options.pathname || window.location.pathname;
+      history.push(convertToHistory(urlStateWithPreviousState, pathname, options.toIdMappers));
       if (typeof callback === 'function') {
         callback.apply(context);
       }
