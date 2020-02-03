@@ -42,8 +42,7 @@ const reactUrlStateOptions = {
   maintained in state to a string shown in the URL. */
   toIdMappers: {
     user: user => user.id
-  },
-  pathname: 'your path name'
+  }
 }
 
 export default class YourComponent extends React.Component {
@@ -174,16 +173,6 @@ const options = {
 
 They are just normal functions. There is no need for promises here since your data object should already contain 
 something like an id.
-
-#### *pathname*
-
-The pathname of your component is defined here. If the page is at `YOUR_APPS_ROOT/main/my_page` you define:
-
-```js
-const options = {
-  pathname: '/main/my_page'
-}
-```
 
 #### *debug*
 
