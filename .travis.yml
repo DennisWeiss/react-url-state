@@ -6,7 +6,7 @@ script:
 deploy:
   provider: npm
   email: weiss.dennis98@yahoo.de
-  api_key: $NPM_TOKEN
+  token: $NPM_TOKEN
   on:
     tags: true
     branch: master
