@@ -118,7 +118,15 @@ var initializedReactUrlState = function (options, callback) {
   });
 
   if(options.debug) { console.log('react-url-state: getting id resolver promises..'); }
-  getIdResolverPromise(urlState, options.fromIdResolvers).then(newState => setUrlState(newState, callback));
+
+  getIdResolverPromise(urlState, options.fromIdResolvers).then(newState => {
+    if(options.leavestate === true) {
+      callback.apply(context, [newState]);
+    } else {
+      setUrlState(newState, callback)
+    }
+  });
+
 
   return {
     setUrlState: setUrlState
