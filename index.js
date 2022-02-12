@@ -1,9 +1,10 @@
 'use strict';
 
-var createHistory = require('history/createBrowserHistory').default;
+var createBrowserHistory = require('history/createBrowserHistory').default;
+var createMemoryHistory = require('history/createMemoryHistory').default;
 var queryString = require('./query-string');
 
-var history = createHistory();
+const history = typeof window !== 'undefined' ? createBrowserHistory() : createMemoryHistory();
 
 var isPrimitiveType = function (a) {
   return typeof a === 'string' || typeof a === 'number' || typeof a === 'boolean';
@@ -24,7 +25,13 @@ var getIdResolverPromise = function (urlState, resolvers, state, resolve, index=
     resolve(currentState);
   } else {
     var key = Object.keys(currentUrlState)[index];
-    if (resolvers[key] == null) {
+    if(typeof resolvers === "function") {
+      resolvers(key, currentUrlState[key], currentState)
+        .then(function (newState) {
+          currentState = newState;
+          getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
+        });
+    } else if (resolvers[key] == null) {
       getIdResolverPromise(currentUrlState, resolvers, currentState, resolve, index + 1);
     } else if (typeof resolvers[key] === 'function') {
       resolvers[key](currentUrlState[key])
@@ -42,7 +49,9 @@ var getSearchString = function (state, toIdMappers) {
   }
   return '?' + Object.keys(state)
     .map(function (key) {
-      if (toIdMappers[key] == null) {
+      if(typeof toIdMappers === "function") {
+        return toIdMappers(key, state);
+      } else if (toIdMappers[key] == null) {
         if (isPrimitiveType(state[key])) {
           return key + '=' + encodeURIComponent(state[key] != null ? state[key] : '');
         } else {
@@ -56,7 +65,8 @@ var getSearchString = function (state, toIdMappers) {
         return key + '=' + encodeURIComponent(value != null ? value : '');
       }
     })
-    .join('&');
+    .filter(p => p !== undefined && p !== null)
+    .join('&')
 };
 
 var convertToHistory = function (state, pathname, toIdMappers) {
@@ -74,7 +84,7 @@ var getCombinedUrlState = function (previousState, newUrlState) {
   return combinedUrlState
 }
 
-var initializedReactUrlState = function (options) {
+var initializedReactUrlState = function (options, callback) {
   var context = this;
   if (options == null) {
     throw 'No options defined in initializeReactUrlState! ' +
@@ -90,7 +100,7 @@ var initializedReactUrlState = function (options) {
   }
 
   var setUrlState = function (urlState, callback) {
-    if(options.debug) { console.log('react-url-state: setting state: ', urlState); }
+    if(options.debug) { console.log('react-url-state: setting state: ', urlState, ' callback: ', callback); }
     context.setState(urlState, function () {
       var urlStateWithPreviousState = getCombinedUrlState(queryString.parse(history.location.search), urlState);
       let pathname = options.pathname || window.location.pathname;
@@ -108,7 +118,15 @@ var initializedReactUrlState = function (options) {
   });
 
   if(options.debug) { console.log('react-url-state: getting id resolver promises..'); }
-  getIdResolverPromise(urlState, options.fromIdResolvers).then(setUrlState);
+
+  getIdResolverPromise(urlState, options.fromIdResolvers).then(newState => {
+    if(options.leavestate === true) {
+      callback.apply(context, [newState]);
+    } else {
+      setUrlState(newState, callback)
+    }
+  });
+
 
   return {
     setUrlState: setUrlState
